@@ -1,0 +1,242 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.btn.btn-danger.logout {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #061320;
+    --bs-btn-border-color: #061320;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #bb2d3b;
+    --bs-btn-hover-border-color: #b02a37;
+    --bs-btn-focus-shadow-rgb: 225,83,97;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #b02a37;
+    --bs-btn-active-border-color: #a52834;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #dc3545;
+    --bs-btn-disabled-border-color: #dc3545;
+    border-radius: 0px;
+}
+
+#nav-item{
+    text-decoration: none;
+}
+
+#nav-item:hover{
+    color: #2691d9;
+}
+
+.perfil{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: white;
+    height: 8vh;
+    width: 100%;
+}
+
+.imagenperfil{
+    width: 20%;
+    height: 6vh;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 100px;
+    background-color: gray;
+    position: relative;
+    overflow: hidden;
+}
+
+.imagenperfil img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.d-flex{
+    margin-right: 4%;
+    width: 16%;
+    cursor: pointer;
+    border-radius: 11px;
+    background-color: #061320;
+}
+
+.po{
+    margin-bottom: 0%;
+    margin-right: 2%;
+}
+
+.dropdown {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+}
+
+.d-flex:hover{
+    background-color: #1d61a0;
+}
+
+  
+.dropdown-content {
+    display: none;
+    position: absolute;
+    margin-left: 30%;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+
+.custom {
+    background-color: #0B2742; 
+}
+.nav-link.letras {
+    color: white;
+    text-decoration: underline;
+}
+.navbar-toggler.color {
+    color: rgb(255 255 255 / 65%);
+    border: var(--bs-border-width) solid rgba(255, 255, 255, 0.15);
+}
+@media (max-width: 1300px) {
+    .d-flex{
+        width: 25%;
+    }
+}
+
+@media (max-width: 991px) {
+    .d-flex{
+        margin-bottom: 1%;
+    }
+}
+
+@media (max-width: 700px) {
+    .d-flex{
+        width: 30%;
+    }
+}
+
+@media (max-width: 600px) {
+    .d-flex{
+        width: 35%;
+    }
+}
+
+@media (max-width: 530px) {
+    .d-flex{
+        width: 40%;
+    }
+}
+
+@media (max-width: 455px) {
+    .d-flex{
+        width: 45%;
+    }
+}
+
+@media (max-width: 408px) {
+    .d-flex{
+        width: 50%;
+    }
+}
+
+@media (max-width: 390px) {
+    .d-flex{
+        width: 55%;
+    }
+}
+
+@media (max-width: 341px) {
+    .d-flex{
+        width: 60%;
+    }
+}
+
+@media (min-height:900px){
+    .d-flex {
+        width: 60%;
+    }
+}
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    height: 100vh;
+    overflow: visible;
+    background-image: linear-gradient(rgba(5, 7, 12, 0.5), rgba(5, 7, 12, 0.5)),
+    url('../images/remaxf.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    background-position: left top;
+}
+.cartas{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.carta{
+    position: relative;
+    background: #0B2742;
+    width: 20%;
+    height: 69vh;
+    margin:3%;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0px 1px 10px rgba(0,0,0,0.2);
+    cursor: default;
+    transition: all 400ms ease;
+    color: white;
+    text-align: center;
+    cursor: pointer;
+}
+
+.carta img{
+    position: absolute;
+    top: 41%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+}
+.carta h1{
+    position: absolute;
+    bottom: 30%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 140%
+}
+
+
+.carta:hover{
+    box-shadow: 5px 5px 20px rgba(0,0,0,1);
+    transform: translateY(-3%);
+}
+
+.bi.bi-people-fill{
+    fill: white;
+    position: absolute;
+    top: 41%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 30%;
+}
+
+@media (max-width: 700px) {
+    .cartas{
+        display: block;
+    }
+    .carta{
+        margin: 3% auto;
+        width: 50%;
+        height: 57vh;
+    }
+  
+}

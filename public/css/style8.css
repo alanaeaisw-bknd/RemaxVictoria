@@ -1,0 +1,314 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#logoutModalContent{
+    background-color: white;
+}
+.btn.btn-danger.logout {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #061320;
+    --bs-btn-border-color: #061320;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #bb2d3b;
+    --bs-btn-hover-border-color: #b02a37;
+    --bs-btn-focus-shadow-rgb: 225,83,97;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #b02a37;
+    --bs-btn-active-border-color: #a52834;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #dc3545;
+    --bs-btn-disabled-border-color: #dc3545;
+    border-radius: 0px;
+}
+
+#nav-item{
+    text-decoration: none;
+}
+
+#nav-item:hover{
+    color: #2691d9;
+}
+
+.perfil{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: white;
+    height: 8vh;
+    width: 100%;
+}
+
+.imagenperfil{
+    width: 20%;
+    height: 6vh;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 100px;
+    background-color: gray;
+    position: relative;
+    overflow: hidden;
+}
+
+.imagenperfil img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.d-flex{
+    margin-right: 4%;
+    width: 16%;
+    cursor: pointer;
+    border-radius: 11px;
+    background-color: #061320;
+}
+
+.po{
+    margin-bottom: 0%;
+    margin-right: 2%;
+}
+
+.dropdown {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+}
+
+.d-flex:hover{
+    background-color: #1d61a0;
+}
+
+  
+.dropdown-content {
+    display: none;
+    position: absolute;
+    margin-left: 30%;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+
+.custom {
+    background-color: #0B2742; 
+}
+.nav-link.letras {
+    color: white;
+    text-decoration: underline;
+}
+.navbar-toggler.color {
+    color: rgb(255 255 255 / 65%);
+    border: var(--bs-border-width) solid rgba(255, 255, 255, 0.15);
+}
+
+body {
+    min-height: 100vh;
+    min-width: 100%;
+    --bs-body-bg: #bae6f7;
+    padding-bottom: 2%;
+}
+
+.estadisticas{
+    display: flex;
+    width: 96%;
+    height: 79vh;
+    margin-left: 2%;
+
+}
+
+.grafica{
+    background-color: white;
+    width: 64%;
+    height: 71vh;
+    margin-left: 3%;
+    margin-top: 3%;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+}
+
+.cabecera{
+    width: 100%;
+    height: 11vh;
+    background-color: #0B2742;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    font-weight: bolder;
+    display: flex;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+.tabla{
+    background: linear-gradient(#134a7f, #3e709f);
+    width: 27%;
+    height: 71vh;
+    margin-top: 3%;
+    margin-left: 3%;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+}
+
+.chart-heading {
+    font-family: "Rubik", sans-serif;
+    color: #023047;
+    text-transform: uppercase;
+    font-size: 24px;
+    text-align: center;
+}
+  
+.chart-container {
+    width: 100%; /* Modificado para ocupar todo el ancho del contenedor */
+    height: 100%; /* Modificado para ocupar todo el alto del contenedor */
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+.my-chart {
+    width: 80%; /* Ajusta el porcentaje según tu preferencia */
+    height: auto; /* Hace que la altura se ajuste automáticamente para mantener la proporción */
+}
+.programming-stats {
+    font-family: "Rubik", sans-serif;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    width: 87%;
+    height: 100%;
+    color: #023047;
+    transition: all 400ms ease;
+    justify-content: center;
+}
+  
+.programming-stats .details ul {
+    list-style: none;
+    padding: 0;
+}
+  
+.programming-stats .details ul li {
+    font-size: 16px;
+    margin: 12px 0;
+    text-transform: uppercase;
+}
+  
+.programming-stats .details .percentage {
+    font-weight: 700;
+    color: #e63946;
+}
+
+.parametro{
+    margin: 0;
+    margin-right: 2%;
+}
+
+#inputt{
+    background-color: #0B2742;
+    border-color: #ffffff5e;
+    color: #999;
+    width: 70%;
+    height: 5vh;
+    margin-right: 2%;
+    fill: #ffffff5e;
+}
+#inputt::placeholder {
+    color: #999; /* Cambia el color a gris o cualquier otro color deseado */
+  
+}
+table {
+    color: white;
+    font-size: 14px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    width: 100%;
+    height: 0vh;
+}
+thead {
+    background: #0B2742;
+    height: 10vh;
+}
+.colprin {
+    border-right: solid 1px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    font-size:small;
+}
+.colfin{
+    border-left: solid 1px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    font-size:small;
+}
+tbody{
+    background: linear-gradient(#134a7f, #3e709f);
+}
+tbody td {
+    padding: 15px;
+    padding-left: 2px;
+    border-right: solid 1px rgba(255, 255, 255, 0.2);
+    border-bottom: solid 1px rgba(255, 255, 255, 0.2);
+    word-wrap: break-word;
+}
+tbody tr:hover {
+    background: rgba(103, 168, 243, 0.4);
+}
+.search{
+    width: 100%;
+    height: 13vh;
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center;
+}
+
+.buscador{
+    display: flex;
+    width: 25%;
+    height: 9vh;
+    background-color: #0B2742;
+    border-radius: 5px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center;
+}
+
+.lupa-cuad{
+    width: 14%;
+    height: 5vh;
+    background-color: #0B2742;
+    fill: #ffffff5e;
+    border-right: solid 1px #ffffff5e;
+    border-left: solid 1px #ffffff5e;
+    border-top: solid 1px #ffffff5e;
+    border-bottom: solid 1px #ffffff5e;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.lupa{
+    fill: #ffffff5e;
+    transition: fill 0.2s;
+}
+
+.lupa-cuad:hover{
+    background-color: #2691d9;
+}
+.lupa-cuad:hover .lupa{
+    fill: #fff
+}
+
+#titulo-ul{
+    font-weight: bolder;
+}

@@ -1,0 +1,169 @@
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-image: linear-gradient(rgba(5, 7, 12, 0.5), rgba(5, 7, 12, 0.5)),
+                    url('../images/back.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top;
+    height: 100vh;
+    overflow: auto; /* Cambiado a "auto" para permitir el desplazamiento */
+    color: white; /* Cambiado el color de texto a blanco */
+}
+
+/* Navbar Styles */
+.custom {
+    background-color: #0B2742;
+}
+
+.nav-link.letras {
+    color: white;
+    text-decoration: underline;
+}
+
+.navbar-toggler.color {
+    color: rgba(255, 255, 255, 0.65);
+    border: var(--bs-border-width) solid rgba(255, 255, 255, 0.15);
+}
+
+.nav-item:hover {
+    color: #2691d9;
+}
+
+/* Centered Container Styles */
+.center {
+    position: absolute;
+    top: 62%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%; /* Aumentado el ancho para una mejor visualización */
+    background: #0B2742;
+    border-radius: 10px;
+    padding: 5px; /* Añadido relleno para un mejor espacio interno */
+    text-align: center; /* Centrar el contenido */
+    color: white; /* Cambiado el color de texto a blanco */
+    margin-bottom: 20px; /* Agrega un margen inferior de 20 píxeles al contenedor */
+}
+
+/* Form Styles */
+.center form {
+    max-width: 700px; /* Limitado el ancho del formulario para una mejor legibilidad */
+    margin: 0 auto; /* Centrar el formulario dentro del contenedor */
+}
+
+.txt_field {
+    position: relative;
+    margin: 20px 0; /* Aumentado el espaciado vertical */
+}
+
+.txt_field input {
+    width: 100%;
+    padding: 10px; /* Aumentado el relleno para un mejor tamaño del campo de entrada */
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    background: none;
+    outline: none;
+    color: white; /* Cambiado el color de texto a blanco */
+}
+
+.txt_field label {
+    position: absolute;
+    top: 0;
+    left: 10px; /* Aumentado el margen izquierdo para una mejor alineación */
+    color: #adadad;
+    font-size: 16px;
+    pointer-events: none;
+    transition: .5s;
+    color: white; /* Cambiado el color de texto a blanco */
+}
+
+.txt_field span::before {
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #2691d9;
+    transition: .5s;
+}
+
+/* Button Styles */
+input[type="submit"] {
+    width: 40%; /* Adjusted the width to make the button smaller horizontally */
+    height: 40px; /* Adjusted the height to make the button smaller vertically */
+    background: #365C80;
+    border-radius: 25px;
+    font-size: 18px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    margin: 20px 0;
+}
+
+
+input[type="submit"]:hover {
+    background: #2c506e;
+}
+
+/* Custom Select Styles */
+.campo select {
+    width: 50%;
+    height: 31px;
+    font-size: 14px;
+    color: #333; /* Dark text color for elegance */
+    background: #f5f5f5; /* Light gray background */
+    border: 2px solid #ccc; /* A slightly thicker border for an elegant look */
+    border-radius: 5px;
+    padding: 3px;
+    outline: none;
+    margin-bottom: 10px;
+    transition: border-color 0.2s, background 0.2s; /* Smooth transitions for hover/focus */
+}
+
+.campo {
+    margin-bottom: 5px; /* Agregado un margen inferior para separar los elementos */
+}
+
+.campo select:hover,
+.campo select:focus {
+    border-color: #2691d9; /* Highlight border on hover/focus */
+    background: white; /* Light background on hover/focus */
+}
+
+/* Optional - Add an arrow icon for the select */
+.campo select::after {
+    content: '▼';
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #2691d9;
+}
+
+/* Optional - Add box-shadow on hover/focus for an elegant lift effect */
+.campo select:hover,
+.campo select:focus {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Success Message Styles */
+.success-message {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: white; /* Cambiado el color de texto a blanco */
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999; /* Valor alto para que se muestre en primer plano */
+}
