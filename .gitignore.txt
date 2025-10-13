@@ -1,0 +1,10 @@
+# Claves y secretos
+*.pem
+*.key
+.ssh/
+.env
+
+# Dependencias y archivos temporales
+node_modules/
+vendor/
+.DS_Store
