@@ -1,11 +1,10 @@
 <?php
 namespace App\Models;
-
+//registro cierre model
 use Illuminate\Database\Eloquent\Model;
 
 class RegistroCierre extends Model
 {
-    
     protected $dates = ['created_at', 'updated_at'];
 
     protected $table = 'registro_cierre';
@@ -35,20 +34,25 @@ class RegistroCierre extends Model
         'genero',
         'rango_edad',
         'estado_civil',
-        'fecha', // Agrega el nuevo campo fecha
+        'fecha',
+        'porcentaje_comision',//Nuevos campos agregados para comisiones }
+        'monto_comision_total',                                     // }
+        'porcentaje_ingresador',                               // }   // }  
+        'porcentaje_cerrador',                               // }    // }
+        'porcentaje_oficina',                            // }     // }   // }
+        'comision_ingresador',                                 // }
+        'comision_cerrador',                                             // }
+        'comision_oficina', // Nuevo campo agregado   // }
     ];
+
     // En tu modelo RegistroCierre
+    public function userCerro()
+    {
+        return $this->belongsTo(User::class, 'cerro');
+    }
 
-public function userCerro()
-{
-    return $this->belongsTo(User::class, 'cerro');
-}
-
-public function userIngreso()
-{
-    return $this->belongsTo(User::class, 'ingreso');
-}
-
-
-
+    public function userIngreso()
+    {
+        return $this->belongsTo(User::class, 'ingreso');
+    }
 }

@@ -124,6 +124,11 @@ $fuentes_contacto = FuenteContacto::all();
         </select>
     </div>
 </div>
+<div class="col">
+        <label for="porcentaje_comision" class="form-label">Porcentaje de comision:</label>
+        <input type="text" id="porcentaje_comision" name="porcentaje_comision" class="form-control" required pattern="\d*">
+        <small class="form-text text-muted">Ingrese solo caracteres numéricos.</small>
+    </div>
         <div class="row">
             <div class="col">
                 <input type="submit" value="Guardar" class="btn btn-primary mt-3">
