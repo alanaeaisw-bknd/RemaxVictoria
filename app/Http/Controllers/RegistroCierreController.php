@@ -60,9 +60,9 @@ class RegistroCierreController extends Controller
     // Definir porcentajes según si el ingresador y cerrador son el mismo
     if ($request->ingreso == $request->cerro) {
         // Caso: ingresador y cerrador son el mismo
-        $porcentajeIngresador = 50;
+        $porcentajeIngresador = 70;
         $porcentajeCerrador = 0;
-        $porcentajeOficina = 50;
+        $porcentajeOficina = 30;
     } else {
         // Caso: ingresador y cerrador diferentes
         $porcentajeIngresador = 35;
