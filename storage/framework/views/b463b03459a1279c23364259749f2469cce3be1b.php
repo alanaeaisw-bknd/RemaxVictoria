@@ -1,7 +1,7 @@
-@php
+<?php
 use App\Models\FuenteContacto;
 $fuentes_contacto = FuenteContacto::all();
-@endphp
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,7 +9,7 @@ $fuentes_contacto = FuenteContacto::all();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Registro de Cierre</title>
-    <link rel="stylesheet" href="{{ asset('css/style6.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('css/style6.css')); ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
@@ -17,32 +17,32 @@ $fuentes_contacto = FuenteContacto::all();
 
 
     <header>
-        @include('navCierre')
+        <?php echo $__env->make('navCierre', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     </header>
     <div class="center">
     <div class="estilo-random">
             <h1 class="texto-grande">Registro de Cierre</h1>
         </div>
         <div class="container-scroll">
-    <form method="post" action="{{ route('registrocierre.store') }}" class="mt-4" autocomplete="off">
-        @csrf
+    <form method="post" action="<?php echo e(route('registrocierre.store')); ?>" class="mt-4" autocomplete="off">
+        <?php echo csrf_field(); ?>
         <div class="row mb-3">
             <div class="col">
                 <label for="cerro" class="form-label">Cerro:</label>
                 <select id="cerro" name="cerro" class="form-select" required>
                     <option value="" selected>Elige</option>
-                    @foreach($usuarios as $id => $nombre)
-                        <option value="{{ $id }}">{{ $nombre }}</option>
-                    @endforeach
+                    <?php $__currentLoopData = $usuarios; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $nombre): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($id); ?>"><?php echo e($nombre); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
             </div>
             <div class="col">
                 <label for="ingreso" class="form-label">Ingreso:</label>
                 <select id="ingreso" name="ingreso" class="form-select" required>
                     <option value="" selected>Elige</option>
-                    @foreach($usuarios as $id => $nombre)
-                        <option value="{{ $id }}">{{ $nombre }}</option>
-                    @endforeach
+                    <?php $__currentLoopData = $usuarios; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $nombre): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($id); ?>"><?php echo e($nombre); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
             </div>
         </div>
@@ -98,9 +98,9 @@ $fuentes_contacto = FuenteContacto::all();
                 <label for="fuenteContacto" class="form-label">Fuente de Contacto:</label>
                 <select id="fuenteContacto" name="fuente_contacto" class="form-select" required>
                     <option value="" selected>Elige</option>
-                    @foreach($fuentes_contacto as $fuente_contacto)
-                        <option value="{{ $fuente_contacto->id }}">{{ $fuente_contacto->nombre_fuente }}</option>
-                    @endforeach
+                    <?php $__currentLoopData = $fuentes_contacto; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $fuente_contacto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($fuente_contacto->id); ?>"><?php echo e($fuente_contacto->nombre_fuente); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
             </div>
         </div>
@@ -160,4 +160,4 @@ $fuentes_contacto = FuenteContacto::all();
     </script>
 </body>
 
-</html>
+</html><?php /**PATH C:\laragon\www\RemaxVictoria\resources\views/registrocierre.blade.php ENDPATH**/ ?>
