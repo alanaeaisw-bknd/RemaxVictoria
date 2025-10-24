@@ -1,1 +1,42 @@
 node_modules
+# Laravel specific
+/vendor/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Laravel storage & cache
+/storage/*.key
+/storage/app/public
+/storage/framework/*
+/storage/logs/*
+!/storage/framework/.gitignore
+!/storage/logs/.gitignore
+
+# Compiled files
+/bootstrap/cache/*.php
+!/bootstrap/cache/.gitignore
+
+# IDE & system files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# Composer & NPM lock files (optional, keep if you want reproducible installs)
+# composer.lock
+# package-lock.json
+
+# Cache or backup files
+*.bak
+*.tmp
+
+# OS-specific
+desktop.ini
