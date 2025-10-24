@@ -506,14 +506,14 @@
     ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`permisos_id`) REFERENCES `permissions` (`id`);
   COMMIT;
   --NUEVOS CAMPOS AGREGADOS A LA TABLA DE REGISTRO_CIERRE 15-10-2025
-  ADD COLUMN IF NOT EXISTS porcentaje_comision DECIMAL(5,2) NULL AFTER fuente_contacto,
-  ADD COLUMN IF NOT EXISTS monto_comision_total DECIMAL(12,2) NULL AFTER porcentaje_comision,
-  ADD COLUMN IF NOT EXISTS porcentaje_ingresador DECIMAL(5,2) NULL AFTER monto_comision_total,
-  ADD COLUMN IF NOT EXISTS porcentaje_cerrador DECIMAL(5,2) NULL AFTER porcentaje_ingresador,
-  ADD COLUMN IF NOT EXISTS porcentaje_oficina DECIMAL(5,2) NULL AFTER porcentaje_cerrador,
-  ADD COLUMN IF NOT EXISTS comision_ingresador DECIMAL(12,2) NULL AFTER porcentaje_oficina,
-  ADD COLUMN IF NOT EXISTS comision_cerrador DECIMAL(12,2) NULL AFTER comision_ingresador,
-  ADD COLUMN IF NOT EXISTS comision_oficina DECIMAL(12,2) NULL AFTER comision_cerrador
+  ADD COLUMN porcentaje_comision DECIMAL(5,2) NULL AFTER fuente_contacto,
+  ADD COLUMN monto_comision_total DECIMAL(12,2) NULL AFTER porcentaje_comision,
+  ADD COLUMN porcentaje_ingresador DECIMAL(5,2) NULL AFTER monto_comision_total,
+  ADD COLUMN porcentaje_cerrador DECIMAL(5,2) NULL AFTER porcentaje_ingresador,
+  ADD COLUMN porcentaje_oficina DECIMAL(5,2) NULL AFTER porcentaje_cerrador,
+  ADD COLUMN comision_ingresador DECIMAL(12,2) NULL AFTER porcentaje_oficina,
+  ADD COLUMN comision_cerrador DECIMAL(12,2) NULL AFTER comision_ingresador,
+  ADD COLUMN comision_oficina DECIMAL(12,2) NULL AFTER comision_cerrador
   /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
   /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
   /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
