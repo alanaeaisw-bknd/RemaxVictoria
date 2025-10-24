@@ -57,23 +57,42 @@ class RegistroCierreController extends Controller
     $porcentajeComision = $request->porcentaje_comision;
     $montoComisionTotal = $montoPropiedad * ($porcentajeComision / 100);
 
-    // Definir porcentajes según si el ingresador y cerrador son el mismo
-    if ($request->ingreso == $request->cerro) {
-        // Caso: ingresador y cerrador son el mismo
-        $porcentajeIngresador = 70;
-        $porcentajeCerrador = 0;
-        $porcentajeOficina = 30;
-    } else {
-        // Caso: ingresador y cerrador diferentes
-        $porcentajeIngresador = 35;
-        $porcentajeCerrador = 35;
-        $porcentajeOficina = 30;
-    }
+    // Verificar si está marcado el modo developer
+    $modoDeveloper = $request->has('modo_developer');
 
-    // Cálculo de montos individuales
-    $comisionIngresador = $montoComisionTotal * ($porcentajeIngresador / 100);
-    $comisionCerrador = $montoComisionTotal * ($porcentajeCerrador / 100);
-    $comisionOficina = $montoComisionTotal * ($porcentajeOficina / 100);
+    if ($modoDeveloper) {
+        // Caso: modo developer activado (50% oficina / 50% developer)
+        $porcentajeIngresador = 0;
+        $porcentajeCerrador = 0;
+        $porcentajeOficina = 50;
+        $porcentajeDeveloper = 50;
+
+        // Cálculo de montos individuales
+        $comisionIngresador = 0;
+        $comisionCerrador = 0;
+        $comisionOficina = $montoComisionTotal * ($porcentajeOficina / 100);
+        $comisionDeveloper = $montoComisionTotal * ($porcentajeDeveloper / 100);
+    } else {
+        // Definir porcentajes según si el ingresador y cerrador son el mismo
+        if ($request->ingreso == $request->cerro) {
+            // Caso: ingresador y cerrador son el mismo
+            $porcentajeIngresador = 70;
+            $porcentajeCerrador = 0;
+            $porcentajeOficina = 30;
+        } else {
+            // Caso: ingresador y cerrador diferentes
+            $porcentajeIngresador = 35;
+            $porcentajeCerrador = 35;
+            $porcentajeOficina = 30;
+        }
+
+        // Cálculo de montos individuales
+        $comisionIngresador = $montoComisionTotal * ($porcentajeIngresador / 100);
+        $comisionCerrador = $montoComisionTotal * ($porcentajeCerrador / 100);
+        $comisionOficina = $montoComisionTotal * ($porcentajeOficina / 100);
+        $comisionDeveloper = null;
+        $porcentajeDeveloper = null;
+    }
 
     // Crear registro en la base de datos
     $registro = RegistroCierre::create([
@@ -91,9 +110,11 @@ class RegistroCierreController extends Controller
         'porcentaje_ingresador' => $porcentajeIngresador,
         'porcentaje_cerrador' => $porcentajeCerrador,
         'porcentaje_oficina' => $porcentajeOficina,
+        'porcentaje_developer' => $porcentajeDeveloper,
         'comision_ingresador' => $comisionIngresador,
         'comision_cerrador' => $comisionCerrador,
         'comision_oficina' => $comisionOficina,
+        'comision_developer' => $comisionDeveloper,
     ]);
 
     // Redirige a la página de éxito con un mensaje
