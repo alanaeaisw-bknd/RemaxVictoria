@@ -48,7 +48,7 @@ class EstadisticasController extends Controller
 
             return view('estadisticas', compact(
                 'usuarios', 'stats', 'permiso', 'ingresoStats', 'recursoStats',
-                'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats','developerStats'
+                'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats','developerStats','oficinaStats',
             ));
         }
 
@@ -61,15 +61,12 @@ class EstadisticasController extends Controller
         $estadoCivilStats = $this->generateColumnStats('estado_civil');
         $mesStats = $this->generateStatsByMonth();
         $developerStats = $this->generateDeveloperStats($fechaInicio, $fechaFin);
-        
+        $oficinaStats = $this->generateStatsOficinaByMonth($fechaInicio, $fechaFin);
         return view('estadisticas', compact(
             'usuarios', 'stats', 'permiso', 'ingresoStats', 'recursoStats',
-            'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats', 'developerStats' 
+            'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats', 'developerStats','oficinaStats'
         ));
-    }
-
-    // Estadísticas de cerrador
-    private function generateStats()
+    public function generateStats()
     {
         return RegistroCierre::join('users', 'registro_cierre.cerro', '=', 'users.id')
             ->select(
@@ -152,7 +149,34 @@ class EstadisticasController extends Controller
             DB::raw('MONTHNAME(fecha) as month_name'),
             DB::raw('count(*) as cierres_count')
         )
-        ->groupBy(DB::raw('MONTH(fecha), MONTHNAME(fecha)'));
+        ->groupBy(DB::raw('MONTH(fecha), MONTHNAME(fecha)'))
+        ->orderBy('month', 'asc'); // Ordenamos por el número del mes
+
+        if ($fechaInicio && $fechaFin) {
+            $query->whereBetween('fecha', [$fechaInicio, $fechaFin]);
+        }
+
+        $stats = $query->get();
+
+        return $stats->map(function ($stat) {
+            $stat->month_name = $this->translateMonthName($stat->month_name);
+            return $stat;
+        });
+    }
+
+    // Esta función obtiene el monto total de la oficina por mes
+    private function generateStatsOficinaByMonth($fechaInicio = null, $fechaFin = null)
+    {
+        $query = RegistroCierre::select(
+            DB::raw('MONTH(fecha) as month'),
+            DB::raw('MONTHNAME(fecha) as month_name'),
+            // =======================================================
+            // ====== ¡CAMBIO AQUÍ! Se usa "comision_oficina" ======
+            // =======================================================
+            DB::raw('sum(registro_cierre.comision_oficina) as total_ganado_oficina')
+        )
+        ->groupBy(DB::raw('MONTH(fecha), MONTHNAME(fecha)'))
+        ->orderBy('month', 'asc'); // Ordenamos por el número del mes
 
         if ($fechaInicio && $fechaFin) {
             $query->whereBetween('fecha', [$fechaInicio, $fechaFin]);
