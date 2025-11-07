@@ -20,14 +20,20 @@
         @include('nav')
     </header>
 
-    <!-- Agrega este código en la sección de búsqueda de tu vista -->
-<div class="search">
+    <div class="search">
     <form id="filterForm" action="{{ route('filtrarRegistros') }}" method="GET" class="buscador">
-        @csrf
+        {{-- @csrf <-- ¡ELIMINADO! Los formularios GET no deben llevar esto --}}
+        
         <label for="fechaInicio" class="fechas">FechaInicio</label>
-        <input class="inputt" type="date" id="fechaInicio" name="fechaInicio" required>
+        
+        <input class="inputt" type="date" id="fechaInicio" name="fechaInicio" 
+                value="{{ $fechaInicio ?? '' }}" required>
+        
         <label for="fechaInicio" class="fechas">FechaFin</label>
-        <input class="inputt" type="date" id="fechaFin" name="fechaFin" required>
+        
+        <input class="inputt" type="date" id="fechaFin" name="fechaFin" 
+                value="{{ $fechaFin ?? '' }}" required>
+        
         <button type="submit" class="lupa-cuad">
             <svg class="lupa" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
@@ -75,6 +81,20 @@
         <div class="programming-stats">
             <div class="chart-container">
                 <canvas class="my-chart" id="graficaMes"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="estadisticas">
+    <div class="grafica">
+        <div class="cabecera">
+            <p class="parametro">HISTÓRICO DE OFICINA (MONTO TOTAL GANADO)</p>
+            
+            </div>
+        <div class="programming-stats">
+            <div class="chart-container">
+                <canvas class="my-chart" id="graficaOficina"></canvas>
             </div>
         </div>
     </div>
@@ -154,295 +174,383 @@
 
 
 <script>
-        // Obtén los datos para la gráfica de barras desde el backend
-        var statsData = <?php echo json_encode($stats); ?>;
+    // Obtén los datos para la gráfica de barras desde el backend
+    var statsData = <?php echo json_encode($stats); ?>;
 
-        // Ordena los datos por el monto total de cierres de mayor a menor
-        statsData.sort(function (a, b) {
-            return b.total_monto - a.total_monto;
-        });
+    // Ordena los datos por el monto total de cierres de mayor a menor
+    statsData.sort(function (a, b) {
+        return b.total_monto - a.total_monto;
+    });
 
-        // Preparar los datos para la gráfica de barras
-        var labels = statsData.map(function (stat) {
-            return stat.nombre;
-        });
+    // Preparar los datos para la gráfica de barras
+    var labels = statsData.map(function (stat) {
+        return stat.nombre;
+    });
 
-        var cierresCount = statsData.map(function (stat) {
-            return stat.cierres_count;
-        });
+    var cierresCount = statsData.map(function (stat) {
+        return stat.cierres_count;
+    });
 
-        var totalMonto = statsData.map(function (stat) {
-            return stat.total_monto;
-        });
+    var totalMonto = statsData.map(function (stat) {
+        return stat.total_monto;
+    });
 
-        // Crear la gráfica de barras vertical
-        var ctx = document.getElementById('grafica').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Numero Total',
-                        data: cierresCount,
-                        backgroundColor: '#3498db',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    },
-                    {
-                        label: 'Monto Total',
-                        data: totalMonto,
-                        backgroundColor: '#e74c3c',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
+    // Crear la gráfica de barras vertical
+    var ctx = document.getElementById('grafica').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: 'Numero Total',
+                    data: cierresCount,
+                    backgroundColor: '#3498db',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Monto Total',
+                    data: totalMonto,
+                    backgroundColor: '#e74c3c',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                        label += ': ' + tooltipItem.yLabel;
+                        if (tooltipItem.datasetIndex === 0) {
+                            label += ' cierres';
+                        } else {
+                            label += ' monto: $' + tooltipItem.yLabel.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                        }
+                        return label;
                     }
-                ]
+                }
             },
-            options: {
-                tooltips: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Obtén los datos para la gráfica de barras de "Fuente de Contacto" desde el backend
+    var fuenteContactoData = <?php echo json_encode($fuenteContactoStats); ?>;
+
+    // Preparar los datos para la gráfica de barras de "Fuente de Contacto"
+    var labelsFuenteContacto = fuenteContactoData.map(function (stat) {
+        return stat.fuente_contacto;
+    });
+
+    var fuenteContactoCount = fuenteContactoData.map(function (stat) {
+        return stat.count;
+    });
+
+    // Crear la gráfica de barras para "Fuente de Contacto"
+    var ctxFuenteContacto = document.getElementById('graficaFuenteContacto').getContext('2d');
+    var myChartFuenteContacto = new Chart(ctxFuenteContacto, {
+        type: 'bar',
+        data: {
+            labels: labelsFuenteContacto,
+            datasets: [
+                {
+                    label: 'Numero de Contactos',
+                    data: fuenteContactoCount,
+                    backgroundColor: '#3498db',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+   // Obtén los datos para la gráfica de barras de "Ingreso" desde el backend
+    var ingresoData = <?php echo json_encode($ingresoStats); ?>;
+
+    // Preparar los datos para la gráfica de barras de "Ingreso"
+    var labelsIngreso = ingresoData.map(function (stat) {
+        return stat.ingreso;
+    });
+
+    var ingresoCount = ingresoData.map(function (stat) {
+        return stat.count;
+    });
+
+    var montoTotalIngreso = ingresoData.map(function (stat) {
+        return stat.monto_total || 0; // Asegurar que monto_total esté definido y manejar el caso en que sea nulo
+    });
+
+    // Crear la gráfica de barras para "Ingreso"
+    var ctxIngreso = document.getElementById('graficaIngreso').getContext('2d');
+    var myChartIngreso = new Chart(ctxIngreso, {
+        type: 'bar',
+        data: {
+            labels: labelsIngreso,
+            datasets: [
+                {
+                    label: 'Número Total',
+                    data: ingresoCount,
+                    backgroundColor: '#3498db',
+                    borderColor: '#e74c3c',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Monto Total',
+                    data: montoTotalIngreso,
+                    backgroundColor: '#e74c3c',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Obtén los datos para la gráfica de pastel de "Estado Civil" desde el backend
+    var estadoCivilData = <?php echo json_encode($estadoCivilStats); ?>;
+
+    // Preparar los datos para la gráfica de pastel de "Estado Civil"
+    var labelsEstadoCivil = estadoCivilData.map(function (stat) {
+        return stat.estado_civil;
+    });
+
+    var estadoCivilCount = estadoCivilData.map(function (stat) {
+        return stat.count;
+    });
+
+    // Crear la gráfica de pastel para "Estado Civil"
+    var ctxEstadoCivil = document.getElementById('graficaEstadoCivil').getContext('2d');
+    var myChartEstadoCivil = new Chart(ctxEstadoCivil, {
+        type: 'pie',
+        data: {
+            labels: labelsEstadoCivil,
+            datasets: [
+                {
+                    data: estadoCivilCount,
+                    backgroundColor: ['#3498db', '#e74c3c', '#e74c3c', '#f39c12']
+                }
+            ]
+        }
+    });
+
+    // --- GRÁFICA DE MES ---
+    var mesData = <?php echo json_encode($mesStats); ?>;
+
+    // Preparar los datos para la gráfica de barras por mes
+    var labelsMes = mesData.map(function (stat) {
+        return stat.month_name; // Utilizar el nombre del mes en lugar del número
+    });
+
+    var mesCount = mesData.map(function (stat) {
+        return stat.cierres_count;
+    });
+
+    // Crear la gráfica de barras por mes
+    var ctxMes = document.getElementById('graficaMes').getContext('2d');
+    var myChartMes = new Chart(ctxMes, {
+        type: 'bar',
+        data: {
+            labels: labelsMes,
+            datasets: [{
+                label: 'Cierres Mensuales',
+                data: mesCount,
+                backgroundColor: '#3498db',
+            }]
+        }
+    });
+
+    // Obtén los datos para la gráfica de pastel de "Género" desde el backend
+    var generoData = <?php echo json_encode($generoStats); ?>;
+
+    // Preparar los datos para la gráfica de pastel de "Género"
+    var labelsGenero = generoData.map(function (stat) {
+        return stat.genero;
+    });
+
+    var generoCount = generoData.map(function (stat) {
+        return stat.count;
+    });
+
+    // Crear la gráfica de pastel para "Género"
+    var ctxGenero = document.getElementById('graficaGenero').getContext('2d');
+    var myChartGenero = new Chart(ctxGenero, {
+        type: 'pie',
+        data: {
+            labels: labelsGenero,
+            datasets: [
+                {
+                    data: generoCount,
+                    backgroundColor: ['#3498db', '#e74c3c', '#e74c3c', '#f39c12']
+                }
+            ]
+        }
+    });
+
+    // Obtén los datos para la gráfica de pastel de "Rango de Edad" desde el backend
+    var rangoEdadData = <?php echo json_encode($rangoEdadStats); ?>;
+
+    // Preparar los datos para la gráfica de pastel de "Rango de Edad"
+    var labelsRangoEdad = rangoEdadData.map(function (stat) {
+        return stat.rango_edad;
+    });
+
+    var rangoEdadCount = rangoEdadData.map(function (stat) {
+        return stat.count;
+    });
+
+    // Crear la gráfica de pastel para "Rango de Edad"
+    var ctxRangoEdad = document.getElementById('graficaRangoEdad').getContext('2d');
+    var myChartRangoEdad = new Chart(ctxRangoEdad, {
+        type: 'pie',
+        data: {
+            labels: labelsRangoEdad,
+            datasets: [
+                {
+                    data: rangoEdadCount,
+                    backgroundColor: ['#3498db', '#e74c3c', '#e74c3c', '#f39c12', '#9b59b6']
+                }
+            ]
+        }
+    });
+    // Obtén los datos para la gráfica de pastel de "Recurso" desde el backend
+    var recursoData = <?php echo json_encode($recursoStats); ?>;
+
+    // Preparar los datos para la gráfica de pastel de "RecurSO"
+    var labelsRecurso = recursoData.map(function (stat) {
+        return stat.recurso;
+    });
+
+    var recursoCount = recursoData.map(function (stat) {
+        return stat.count;
+    });
+
+    // Crear la gráfica de pastel para "Recurso"
+    var ctxRecurso = document.getElementById('graficaRecurso').getContext('2d');
+    var myChartRecurso = new Chart(ctxRecurso, {
+        type: 'pie',
+        data: {
+            labels: labelsRecurso,
+            datasets: [
+                {
+                    data: recursoCount,
+                    backgroundColor: ['#3498db', '#2ecc71', '#e74c3c', '#f39c12']
+                }
+            ]
+        }
+    });
+    
+    
+    // =================================================================
+    // === SECCIÓN DE GRÁFICA "HISTÓRICO DE OFICINA" ===
+    // =================================================================
+
+    // 1. Obtener los datos (la variable $oficinaStats que pasamos desde el controlador)
+    var oficinaData = <?php echo json_encode($oficinaStats); ?>;
+
+    // 2. Preparar los datos para Chart.js
+    var labelsOficina = oficinaData.map(function (stat) {
+        return stat.month_name; // Nombres de los meses (ej: "Enero")
+    });
+
+    var dataOficina = oficinaData.map(function (stat) {
+        return parseFloat(stat.total_ganado_oficina) || 0; 
+    });
+
+    // 3. Calcular la suma total
+    const sumaTotalOficina = dataOficina.reduce(function(acumulador, valorActual) {
+        return acumulador + valorActual;
+    }, 0); // Inicia el acumulador en 0
+
+    // 4. Formatear la suma como moneda
+    const formatterOficina = new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: 'MXN', // O la moneda que uses (ej: 'USD')
+        minimumFractionDigits: 2
+    });
+    const totalFormateadoOficina = formatterOficina.format(sumaTotalOficina);
+    
+    // 5. Crear la etiqueta para la leyenda
+    const leyendaConTotal = `Monto Total Ganado por Mes (Total: ${totalFormateadoOficina})`;
+
+
+    // 6. Crear la gráfica
+    var ctxOficina = document.getElementById('graficaOficina').getContext('2d');
+    var myChartOficina = new Chart(ctxOficina, {
+        type: 'bar',
+        data: {
+            labels: labelsOficina,
+            datasets: [{
+                label: leyendaConTotal, 
+                data: dataOficina,
+                backgroundColor: '#e74c3c',
+                borderColor: '#c0392b',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        // Formatear el eje Y como moneda
+                        callback: function(value, index, values) {
+                            return '$' + value.toLocaleString('es-MX');
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
                     callbacks: {
-                        label: function (tooltipItem, data) {
-                            var label = data.datasets[tooltipItem.datasetIndex].label || '';
-                            label += ': ' + tooltipItem.yLabel;
-                            if (tooltipItem.datasetIndex === 0) {
-                                label += ' cierres';
-                            } else {
-                                label += ' monto: $' + tooltipItem.yLabel.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                        // Formatear el tooltip (al pasar el mouse) como moneda
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            
+                            if (label.includes('(')) {
+                                label = 'Monto Total Ganado por Mes';
+                            }
+
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += new Intl.NumberFormat('es-MX', {
+                                    style: 'currency',
+                                    currency: 'MXN' // Puedes cambiar MXN si usas otra moneda
+                                }).format(context.parsed.y);
                             }
                             return label;
                         }
                     }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
                 }
-            }
-        });
-
-        // Obtén los datos para la gráfica de barras de "Fuente de Contacto" desde el backend
-        var fuenteContactoData = <?php echo json_encode($fuenteContactoStats); ?>;
-
-        // Preparar los datos para la gráfica de barras de "Fuente de Contacto"
-        var labelsFuenteContacto = fuenteContactoData.map(function (stat) {
-            return stat.fuente_contacto;
-        });
-
-        var fuenteContactoCount = fuenteContactoData.map(function (stat) {
-            return stat.count;
-        });
-
-        // Crear la gráfica de barras para "Fuente de Contacto"
-        var ctxFuenteContacto = document.getElementById('graficaFuenteContacto').getContext('2d');
-        var myChartFuenteContacto = new Chart(ctxFuenteContacto, {
-            type: 'bar',
-            data: {
-                labels: labelsFuenteContacto,
-                datasets: [
-                    {
-                        label: 'Numero de Contactos',
-                        data: fuenteContactoCount,
-                        backgroundColor: '#3498db',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-       // Obtén los datos para la gráfica de barras de "Ingreso" desde el backend
-var ingresoData = <?php echo json_encode($ingresoStats); ?>;
-
-// Preparar los datos para la gráfica de barras de "Ingreso"
-var labelsIngreso = ingresoData.map(function (stat) {
-    return stat.ingreso;
-});
-
-var ingresoCount = ingresoData.map(function (stat) {
-    return stat.count;
-});
-
-var montoTotalIngreso = ingresoData.map(function (stat) {
-    return stat.monto_total || 0; // Asegurar que monto_total esté definido y manejar el caso en que sea nulo
-});
-
-// Crear la gráfica de barras para "Ingreso"
-var ctxIngreso = document.getElementById('graficaIngreso').getContext('2d');
-var myChartIngreso = new Chart(ctxIngreso, {
-    type: 'bar',
-    data: {
-        labels: labelsIngreso,
-        datasets: [
-            {
-                label: 'Número Total',
-                data: ingresoCount,
-                backgroundColor: '#3498db',
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1
-            },
-            {
-                label: 'Monto Total',
-                data: montoTotalIngreso,
-                backgroundColor: '#e74c3c',
-                borderColor: 'rgba(255, 99, 132, 1)',
-                borderWidth: 1
-            }
-        ]
-    },
-    options: {
-        scales: {
-            y: {
-                beginAtZero: true
             }
         }
-    }
-});
-
-        // Obtén los datos para la gráfica de pastel de "Estado Civil" desde el backend
-        var estadoCivilData = <?php echo json_encode($estadoCivilStats); ?>;
-
-        // Preparar los datos para la gráfica de pastel de "Estado Civil"
-        var labelsEstadoCivil = estadoCivilData.map(function (stat) {
-            return stat.estado_civil;
-        });
-
-        var estadoCivilCount = estadoCivilData.map(function (stat) {
-            return stat.count;
-        });
-
-        // Crear la gráfica de pastel para "Estado Civil"
-        var ctxEstadoCivil = document.getElementById('graficaEstadoCivil').getContext('2d');
-        var myChartEstadoCivil = new Chart(ctxEstadoCivil, {
-            type: 'pie',
-            data: {
-                labels: labelsEstadoCivil,
-                datasets: [
-                    {
-                        data: estadoCivilCount,
-                        backgroundColor: ['#3498db', '#2ecc71', '#e74c3c', '#f39c12']
-                    }
-                ]
-            }
-        });
-/// En tu vista blade, debajo del código Chart.js existente
-var mesData = <?php echo $mesStats; ?>;
-
-// Preparar los datos para la gráfica de barras por mes
-var labelsMes = mesData.map(function (stat) {
-    return stat.month_name; // Utilizar el nombre del mes en lugar del número
-});
-
-var mesCount = mesData.map(function (stat) {
-    return stat.cierres_count;
-});
-
-// Crear la gráfica de barras por mes
-var ctxMes = document.getElementById('graficaMes').getContext('2d');
-var myChartMes = new Chart(ctxMes, {
-    type: 'bar',
-    data: {
-        labels: labelsMes,
-        datasets: [{
-            label: 'Cierres Mensuales',
-            data: mesCount,
-            backgroundColor: '#3498db',
-        }]
-    }
-});
-
-        // Obtén los datos para la gráfica de pastel de "Género" desde el backend
-        var generoData = <?php echo json_encode($generoStats); ?>;
-
-        // Preparar los datos para la gráfica de pastel de "Género"
-        var labelsGenero = generoData.map(function (stat) {
-            return stat.genero;
-        });
-
-        var generoCount = generoData.map(function (stat) {
-            return stat.count;
-        });
-
-        // Crear la gráfica de pastel para "Género"
-        var ctxGenero = document.getElementById('graficaGenero').getContext('2d');
-        var myChartGenero = new Chart(ctxGenero, {
-            type: 'pie',
-            data: {
-                labels: labelsGenero,
-                datasets: [
-                    {
-                        data: generoCount,
-                        backgroundColor: ['#3498db', '#2ecc71', '#e74c3c', '#f39c12']
-                    }
-                ]
-            }
-        });
-
-        // Obtén los datos para la gráfica de pastel de "Rango de Edad" desde el backend
-        var rangoEdadData = <?php echo json_encode($rangoEdadStats); ?>;
-
-        // Preparar los datos para la gráfica de pastel de "Rango de Edad"
-        var labelsRangoEdad = rangoEdadData.map(function (stat) {
-            return stat.rango_edad;
-        });
-
-        var rangoEdadCount = rangoEdadData.map(function (stat) {
-            return stat.count;
-        });
-
-        // Crear la gráfica de pastel para "Rango de Edad"
-        var ctxRangoEdad = document.getElementById('graficaRangoEdad').getContext('2d');
-        var myChartRangoEdad = new Chart(ctxRangoEdad, {
-            type: 'pie',
-            data: {
-                labels: labelsRangoEdad,
-                datasets: [
-                    {
-                        data: rangoEdadCount,
-                        backgroundColor: ['#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6']
-                    }
-                ]
-            }
-        });
-        // Obtén los datos para la gráfica de pastel de "Recurso" desde el backend
-        var recursoData = <?php echo json_encode($recursoStats); ?>;
-
-        // Preparar los datos para la gráfica de pastel de "Recurso"
-        var labelsRecurso = recursoData.map(function (stat) {
-            return stat.recurso;
-        });
-
-        var recursoCount = recursoData.map(function (stat) {
-            return stat.count;
-        });
-
-        // Crear la gráfica de pastel para "Recurso"
-        var ctxRecurso = document.getElementById('graficaRecurso').getContext('2d');
-        var myChartRecurso = new Chart(ctxRecurso, {
-            type: 'pie',
-            data: {
-                labels: labelsRecurso,
-                datasets: [
-                    {
-                        data: recursoCount,
-                        backgroundColor: ['#3498db', '#2ecc71', '#e74c3c', '#f39c12']
-                    }
-                ]
-            }
-        });
-       
-
-
-
-
-        // Puedes agregar más bloques de código similar para otras gráficas
+    });
+    
 </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

@@ -29,39 +29,44 @@ class EstadisticasController extends Controller
         $fechaInicio = $request->input('fechaInicio');
         $fechaFin = $request->input('fechaFin');
 
-        if ($fechaInicio && $fechaFin) {
-            $stats = $this->generateStatsByDateRange($fechaInicio, $fechaFin);
-            $ingresoStats = $this->generateColumnStats2('ingreso', $fechaInicio, $fechaFin);
-            $recursoStats = $this->generateColumnStats('recurso', $fechaInicio, $fechaFin);
-            $fuenteContactoStats = $this->generateColumnStats3('fuente_contacto', $fechaInicio, $fechaFin);
-            $generoStats = $this->generateColumnStats('genero', $fechaInicio, $fechaFin);
-            $rangoEdadStats = $this->generateColumnStats('rango_edad', $fechaInicio, $fechaFin);
-            $estadoCivilStats = $this->generateColumnStats('estado_civil', $fechaInicio, $fechaFin);
-            $mesStats = $this->generateStatsByMonth($fechaInicio, $fechaFin);
+        // ================================================================
+        // =========== LÓGICA DE FECHA DE AÑO ACTUAL POR DEFECTO ===========
+        // ================================================================
 
-            return view('estadisticas', compact(
-                'usuarios', 'stats', 'permiso', 'ingresoStats', 'recursoStats',
-                'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats'
-            ));
+        // Si NO se especifican fechas en el filtro (vista por defecto),
+        // establecemos el rango para que sea el AÑO ACTUAL.
+        if (!$fechaInicio || !$fechaFin) {
+            $currentYear = date('Y');
+            $fechaInicio = $currentYear . '-01-01';
+            $fechaFin = $currentYear . '-12-31';
         }
-
-        $stats = $this->generateStats();
-        $ingresoStats = $this->generateColumnStats2('ingreso');
-        $recursoStats = $this->generateColumnStats('recurso');
-        $fuenteContactoStats = $this->generateColumnStats3('fuente_contacto');
-        $generoStats = $this->generateColumnStats('genero');
-        $rangoEdadStats = $this->generateColumnStats('rango_edad');
-        $estadoCivilStats = $this->generateColumnStats('estado_civil');
-        $mesStats = $this->generateStatsByMonth();
+        
+        // ==============================================================
+        // ==============================================================
+        
+        $stats = $this->generateStatsByDateRange($fechaInicio, $fechaFin);
+        $ingresoStats = $this->generateColumnStats2('ingreso', $fechaInicio, $fechaFin);
+        $recursoStats = $this->generateColumnStats('recurso', $fechaInicio, $fechaFin);
+        $fuenteContactoStats = $this->generateColumnStats3('fuente_contacto', $fechaInicio, $fechaFin);
+        $generoStats = $this->generateColumnStats('genero', $fechaInicio, $fechaFin);
+        $rangoEdadStats = $this->generateColumnStats('rango_edad', $fechaInicio, $fechaFin);
+        $estadoCivilStats = $this->generateColumnStats('estado_civil', $fechaInicio, $fechaFin);
+        $mesStats = $this->generateStatsByMonth($fechaInicio, $fechaFin);
+        $oficinaStats = $this->generateStatsOficinaByMonth($fechaInicio, $fechaFin);
 
         return view('estadisticas', compact(
             'usuarios', 'stats', 'permiso', 'ingresoStats', 'recursoStats',
-            'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats'
+            'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats',
+            'oficinaStats',
+            // Pasamos las fechas (filtradas o por defecto) a la vista
+            'fechaInicio', 
+            'fechaFin' 
         ));
     }
 
-    // Estadísticas de cerrador
-    private function generateStats()
+    // Esta función es llamada por la ruta 'estadisticas.generate', pero no parece usarse
+    // en el flujo principal.
+    public function generateStats()
     {
         return RegistroCierre::join('users', 'registro_cierre.cerro', '=', 'users.id')
             ->select(
@@ -144,7 +149,34 @@ class EstadisticasController extends Controller
             DB::raw('MONTHNAME(fecha) as month_name'),
             DB::raw('count(*) as cierres_count')
         )
-        ->groupBy(DB::raw('MONTH(fecha), MONTHNAME(fecha)'));
+        ->groupBy(DB::raw('MONTH(fecha), MONTHNAME(fecha)'))
+        ->orderBy('month', 'asc'); // Ordenamos por el número del mes
+
+        if ($fechaInicio && $fechaFin) {
+            $query->whereBetween('fecha', [$fechaInicio, $fechaFin]);
+        }
+
+        $stats = $query->get();
+
+        return $stats->map(function ($stat) {
+            $stat->month_name = $this->translateMonthName($stat->month_name);
+            return $stat;
+        });
+    }
+
+    // Esta función obtiene el monto total de la oficina por mes
+    private function generateStatsOficinaByMonth($fechaInicio = null, $fechaFin = null)
+    {
+        $query = RegistroCierre::select(
+            DB::raw('MONTH(fecha) as month'),
+            DB::raw('MONTHNAME(fecha) as month_name'),
+            // =======================================================
+            // ====== ¡CAMBIO AQUÍ! Se usa "comision_oficina" ======
+            // =======================================================
+            DB::raw('sum(registro_cierre.comision_oficina) as total_ganado_oficina')
+        )
+        ->groupBy(DB::raw('MONTH(fecha), MONTHNAME(fecha)'))
+        ->orderBy('month', 'asc'); // Ordenamos por el número del mes
 
         if ($fechaInicio && $fechaFin) {
             $query->whereBetween('fecha', [$fechaInicio, $fechaFin]);
