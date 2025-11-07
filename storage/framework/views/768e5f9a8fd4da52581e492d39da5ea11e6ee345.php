@@ -8,6 +8,8 @@ $fuentes_contacto = FuenteContacto::all();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <br>
+    <br>
     <title>Registro de Cierre</title>
     <link rel="stylesheet" href="<?php echo e(asset('css/style6.css')); ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -129,6 +131,16 @@ $fuentes_contacto = FuenteContacto::all();
         <input type="text" id="porcentaje_comision" name="porcentaje_comision" class="form-control" required pattern="\d*">
         <small class="form-text text-muted">Ingrese solo caracteres numéricos.</small>
     </div>
+    <div class="row mb-3">
+    <div class="col">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="modoDeveloper" name="modo_developer" value="1">
+            <label class="form-check-label" for="modoDeveloper">
+                ¿Es developer? (Aplica 50% oficina / 50% developer)
+            </label>
+        </div>
+    </div>
+</div>
         <div class="row">
             <div class="col">
                 <input type="submit" value="Guardar" class="btn btn-primary mt-3">
@@ -150,6 +162,4 @@ $fuentes_contacto = FuenteContacto::all();
     </script>
 </body>
 
-</html>
-
-<?php /**PATH C:\laragon\www\agenda.remaxvictoria.mx\resources\views/registrocierre.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\laragon\www\agenda.remaxvictoria.mx\resources\views/registrocierre.blade.php ENDPATH**/ ?>

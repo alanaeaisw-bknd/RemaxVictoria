@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ asset('css/style9.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('css/style9.css')); ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -17,20 +17,20 @@
 
 <body>
     <header>
-        @include('nav')
+        <?php echo $__env->make('nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     </header>
 
     <!-- Agrega este código en la sección de búsqueda de tu vista -->
 <div class="search">
-    <form id="filterForm" action="{{ route('filtrarRegistros') }}" method="GET" class="buscador">
-        @csrf
+    <form id="filterForm" action="<?php echo e(route('filtrarRegistros')); ?>" method="GET" class="buscador">
+        <?php echo csrf_field(); ?>
         <label for="fechaInicio" class="fechas">Fecha Inicio</label>
         <input class="inputt" type="date" id="fechaInicio" name="fechaInicio"
-               value="{{ request('fechaInicio', date('Y-01-01')) }}" required>
+               value="<?php echo e(request('fechaInicio', date('Y-01-01'))); ?>" required>
 
         <label for="fechaFin" class="fechas">Fecha Fin</label>
         <input class="inputt" type="date" id="fechaFin" name="fechaFin"
-               value="{{ request('fechaFin', date('Y-12-31')) }}" required>
+               value="<?php echo e(request('fechaFin', date('Y-12-31'))); ?>" required>
 
         <button type="submit" class="lupa-cuad">
             <svg class="lupa" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -39,7 +39,7 @@
         </button>
     </form>
 
-    <button type="button" class="btn btn-warning" onclick="window.location.href='{{ url('/registros-cierre') }}'">EDITAR DATOS</button>
+    <button type="button" class="btn btn-warning" onclick="window.location.href='<?php echo e(url('/registros-cierre')); ?>'">EDITAR DATOS</button>
 </div>
 <div class="hit-the-floor">
     <h1>ANALITICAS DE CIERRES</h1>
@@ -513,9 +513,10 @@ var myChartMes = new Chart(ctxMes, {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/nav.js') }}"></script>
+    <script src="<?php echo e(asset('js/app.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/nav.js')); ?>"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
 </html>
+<?php /**PATH C:\laragon\www\agenda.remaxvictoria.mx\resources\views/estadisticas.blade.php ENDPATH**/ ?>

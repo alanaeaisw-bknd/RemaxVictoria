@@ -12,6 +12,7 @@ class EstadisticasController extends Controller
 {
     public function index(Request $request)
     {
+        $developerStats = collect(); // valor de developer vacio defecto vacío
         $permiso = auth()->user()->permisos_id;
         $user = Auth::guard('web')->user();
         if ($user->permisos->type === 'limited') {
@@ -28,6 +29,11 @@ class EstadisticasController extends Controller
 
         $fechaInicio = $request->input('fechaInicio');
         $fechaFin = $request->input('fechaFin');
+        
+        if (!$fechaInicio || !$fechaFin) {
+        $fechaInicio = date('Y-01-01');
+        $fechaFin = date('Y-12-31');
+}
 
         if ($fechaInicio && $fechaFin) {
             $stats = $this->generateStatsByDateRange($fechaInicio, $fechaFin);
@@ -38,10 +44,11 @@ class EstadisticasController extends Controller
             $rangoEdadStats = $this->generateColumnStats('rango_edad', $fechaInicio, $fechaFin);
             $estadoCivilStats = $this->generateColumnStats('estado_civil', $fechaInicio, $fechaFin);
             $mesStats = $this->generateStatsByMonth($fechaInicio, $fechaFin);
+            $developerStats = $this->generateDeveloperStats($fechaInicio, $fechaFin);
 
             return view('estadisticas', compact(
                 'usuarios', 'stats', 'permiso', 'ingresoStats', 'recursoStats',
-                'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats'
+                'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats','developerStats'
             ));
         }
 
@@ -53,10 +60,11 @@ class EstadisticasController extends Controller
         $rangoEdadStats = $this->generateColumnStats('rango_edad');
         $estadoCivilStats = $this->generateColumnStats('estado_civil');
         $mesStats = $this->generateStatsByMonth();
-
+        $developerStats = $this->generateDeveloperStats($fechaInicio, $fechaFin);
+        
         return view('estadisticas', compact(
             'usuarios', 'stats', 'permiso', 'ingresoStats', 'recursoStats',
-            'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats'
+            'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats', 'developerStats' 
         ));
     }
 
@@ -177,4 +185,23 @@ class EstadisticasController extends Controller
 
         return $translations[$englishMonthName] ?? $englishMonthName;
     }
+    private function generateDeveloperStats($fechaInicio = null, $fechaFin = null)
+{
+    $query = RegistroCierre::join('users', 'registro_cierre.cerro', '=', 'users.id')
+        ->whereNotNull('registro_cierre.comision_developer')
+        ->where('registro_cierre.comision_developer', '>', 0);
+
+    if ($fechaInicio && $fechaFin) {
+        $query->whereBetween('registro_cierre.fecha', [$fechaInicio, $fechaFin]);
+    }
+
+    return $query->select(
+        'users.nombre',
+        DB::raw('count(*) as developer_count'),
+        DB::raw('sum(registro_cierre.comision_developer) as total_monto_developer')
+    )
+    ->groupBy('users.nombre')
+    ->get();
+}
+
 }

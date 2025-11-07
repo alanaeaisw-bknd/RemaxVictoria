@@ -514,6 +514,10 @@
   ADD COLUMN comision_ingresador DECIMAL(12,2) NULL AFTER porcentaje_oficina,
   ADD COLUMN comision_cerrador DECIMAL(12,2) NULL AFTER comision_ingresador,
   ADD COLUMN comision_oficina DECIMAL(12,2) NULL AFTER comision_cerrador
+
+ALTER TABLE registro_cierre
+ADD COLUMN porcentaje_developer DECIMAL(5,2) NULL AFTER porcentaje_oficina,
+ADD COLUMN comision_developer DECIMAL(10,2) NULL AFTER comision_oficina;
   /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
   /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
   /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
