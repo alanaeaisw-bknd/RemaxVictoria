@@ -72,8 +72,10 @@ class RegistroCierreController extends Controller
         $comisionCerrador = 0;
         $comisionOficina = $montoComisionTotal * ($porcentajeOficina / 100);
         $comisionDeveloper = $montoComisionTotal * ($porcentajeDeveloper / 100);
+        $comisionCerrador = $comisionDeveloper; // Asignar la comisión del developer al cerrador para el registro
+        $request->merge(['ingreso' => $request->cerro]);
     } else {
-        // Definir porcentajes según si el ingresador y cerrador son el mismo
+    // Definir porcentajes según si el ingresador y cerrador son el mismo
         if ($request->ingreso == $request->cerro) {
             // Caso: ingresador y cerrador son el mismo
             $porcentajeIngresador = 70;
@@ -104,17 +106,17 @@ class RegistroCierreController extends Controller
         'genero' => $request->genero,
         'rango_edad' => $request->rango_edad,
         'estado_civil' => $request->estado_civil,
-        'fecha' => $request->fecha,
-        'porcentaje_comision' => $porcentajeComision,
-        'monto_comision_total' => $montoComisionTotal,
-        'porcentaje_ingresador' => $porcentajeIngresador,
-        'porcentaje_cerrador' => $porcentajeCerrador,
-        'porcentaje_oficina' => $porcentajeOficina,
-        'porcentaje_developer' => $porcentajeDeveloper,
-        'comision_ingresador' => $comisionIngresador,
-        'comision_cerrador' => $comisionCerrador,
-        'comision_oficina' => $comisionOficina,
-        'comision_developer' => $comisionDeveloper,
+        'fecha' => $request->fecha,                 //Apartir de aqui estan los nuevos campos agregados
+        'porcentaje_comision' => $porcentajeComision,  //Porcentaje que se ingresa en el registro de cierre 
+        'monto_comision_total' => $montoComisionTotal, //Monto total de la comision calculada 3%, 4%, etc
+        'porcentaje_ingresador' => $porcentajeIngresador, //Porcentaje asignado al ingresador
+        'porcentaje_cerrador' => $porcentajeCerrador, //Porcentaje asignado al cerrador
+        'porcentaje_oficina' => $porcentajeOficina, //Porcentaje asignado a la oficina
+        'porcentaje_developer' => $porcentajeDeveloper, //Porcentaje asignado al developer (solo si aplica)
+        'comision_ingresador' => $comisionIngresador, //Monto de comision para el ingresador
+        'comision_cerrador' => $comisionCerrador, //Monto de comision para el cerrador
+        'comision_oficina' => $comisionOficina,     //Monto de comision para la oficina
+        'comision_developer' => $comisionDeveloper,  //Monto de comision para el developer (solo si aplica)
     ]);
 
     // Redirige a la página de éxito con un mensaje

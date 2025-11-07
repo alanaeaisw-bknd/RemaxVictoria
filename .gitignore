@@ -1,1 +1,3 @@
 node_modules
+/storage/framework/cache/
+/storage/logs/laravel.log

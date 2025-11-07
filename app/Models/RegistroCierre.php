@@ -7,10 +7,9 @@ class RegistroCierre extends Model
 {
     protected $table = 'registro_cierre';
 
-    // Mantener false porque en tu controlador no usas timestamps automáticos
     public $timestamps = false;
 
-    // Campos que se pueden llenar con create()
+    //Los campos que se pueden llenar
     protected $fillable = [
         'cerro',
         'ingreso',
