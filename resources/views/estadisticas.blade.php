@@ -86,11 +86,11 @@
 <div class="estadisticas-1">
     <div class="grafica">
         <div class="cabecera">
-            <p class="parametro">ESTADISTICAS COMO DEVELOPER</p>
-        </div>
+            <p class="parametro">ESTADISTICAS COMO DESARROLLADOR</p>
+        </div>  
         <div class="programming-stats">
             <div class="chart-container-mod">
-                <canvas class="my-chart" id="graficaDeveloper"></canvas>
+                <canvas class="my-chart" id="graficadesarrollador"></canvas>
             </div>
         </div>
     </div>
@@ -323,42 +323,42 @@ var myChartIngreso = new Chart(ctxIngreso, {
     }
 });
 
-// === GRÁFICA DE DEVELOPER ===
-var developerData = <?php echo json_encode($developerStats); ?>;
+// === GRÁFICA DE DESARROLADOR ===
+var desarrolladorData = <?php echo json_encode($desarrolladorStats); ?>;
 
 // Ordenar por monto total
-developerData.sort(function (a, b) {
-    return b.total_monto_developer - a.total_monto_developer;
+desarrolladorData.sort(function (a, b) {
+    return b.total_monto_desarrollador - a.total_monto_desarrollador;
 });
 
-var labelsDeveloper = developerData.map(function (stat) {
+var labelsdesarrollador = desarrolladorData.map(function (stat) {
     return stat.nombre;
 });
 
-var developerCount = developerData.map(function (stat) {
-    return stat.developer_count;
+var desarrolladorCount = desarrolladorData.map(function (stat) {
+    return stat.desarrollador_count;
 });
 
-var developerMonto = developerData.map(function (stat) {
-    return stat.total_monto_developer;
+var desarrolladorMonto = desarrolladorData.map(function (stat) {
+    return stat.total_monto_desarrollador;
 });
 
-var ctxDeveloper = document.getElementById('graficaDeveloper').getContext('2d');
-var myChartDeveloper = new Chart(ctxDeveloper, {
+var ctxdesarrollador = document.getElementById('graficadesarrollador').getContext('2d');
+var myChartdesarrollador = new Chart(ctxdesarrollador, {
     type: 'bar',
     data: {
-        labels: labelsDeveloper,
+        labels: labelsdesarrollador,
         datasets: [
             {
                 label: 'Número Total',
-                data: developerCount,
+                data: desarrolladorCount,
                 backgroundColor: '#8e44ad',
                 borderColor: '#5e3370',
                 borderWidth: 1
             },
             {
                 label: 'Monto Total',
-                data: developerMonto,
+                data: desarrolladorMonto,
                 backgroundColor: '#9b59b6',
                 borderColor: '#5e3370',
                 borderWidth: 1

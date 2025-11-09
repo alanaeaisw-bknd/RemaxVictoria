@@ -134,9 +134,9 @@ $fuentes_contacto = FuenteContacto::all();
     <div class="row mb-3">
     <div class="col">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="modoDeveloper" name="modo_developer" value="1">
+            <input class="form-check-input" type="checkbox" id="modoDeveloper" name="modo_desarrollador" value="1">
             <label class="form-check-label" for="modoDeveloper">
-                ¿Es developer? (Aplica 50% oficina / 50% developer)
+                ¿Es desarrollador? (Aplica 50% oficina / 50% desarrollador)
             </label>
         </div>
     </div>

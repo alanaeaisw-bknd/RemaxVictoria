@@ -25,11 +25,11 @@ class RegistroCierre extends Model
         'porcentaje_ingresador',
         'porcentaje_cerrador',
         'porcentaje_oficina',
-        'porcentaje_developer',
+        'porcentaje_desarrollador',
         'comision_ingresador',
         'comision_cerrador',
         'comision_oficina',
-        'comision_developer',
+        'comision_desarrollador',
     ];
 
     // Relaciones

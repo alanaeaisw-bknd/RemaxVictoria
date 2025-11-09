@@ -539,4 +539,4 @@
 </body>
 </html>
 
-<?php /**PATH C:\laragon\www\RemaxVictoria\resources\views/inicioadmin.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\agenda.remaxvictoria.mx\resources\views/inicioadmin.blade.php ENDPATH**/ ?>

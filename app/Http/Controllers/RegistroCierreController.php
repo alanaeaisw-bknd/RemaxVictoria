@@ -38,6 +38,8 @@ class RegistroCierreController extends Controller
     // Método para almacenar un nuevo registro en la base de datos
     public function store(Request $request)
 {
+        //validacion para el campo modo desarrollador 
+        $mododesarrollador = $request->has('modo_desarrollador');
     // Validaciones básicas
     $request->validate([
         'cerro' => 'required|numeric',
@@ -51,28 +53,32 @@ class RegistroCierreController extends Controller
         'fecha' => 'required|date',
         'porcentaje_comision' => 'required|numeric|min:0',
     ]);
+  // Solo exigir ingresador si NO está en modo desarrollador
+    if (!$mododesarrollador) {
+        $rules['ingreso'] = 'required|numeric';
+    }
 
     // Cálculo del monto total de comisión
     $montoPropiedad = $request->monto_propiedad;
     $porcentajeComision = $request->porcentaje_comision;
     $montoComisionTotal = $montoPropiedad * ($porcentajeComision / 100);
 
-    // Verificar si está marcado el modo developer
-    $modoDeveloper = $request->has('modo_developer');
+    // Verificar si está marcado el modo desarrollador
+    $mododesarrollador = $request->has('modo_desarrollador');
 
-    if ($modoDeveloper) {
-        // Caso: modo developer activado (50% oficina / 50% developer)
+    if ($mododesarrollador) {
+        // Caso: modo desarrollador activado (50% oficina / 50% desarrollador)
         $porcentajeIngresador = 0;
         $porcentajeCerrador = 0;
         $porcentajeOficina = 50;
-        $porcentajeDeveloper = 50;
+        $porcentajedesarrollador = 50;
 
         // Cálculo de montos individuales
         $comisionIngresador = 0;
         $comisionCerrador = 0;
         $comisionOficina = $montoComisionTotal * ($porcentajeOficina / 100);
-        $comisionDeveloper = $montoComisionTotal * ($porcentajeDeveloper / 100);
-        $comisionCerrador = $comisionDeveloper; // Asignar la comisión del developer al cerrador para el registro
+        $comisiondesarrollador = $montoComisionTotal * ($porcentajedesarrollador / 100);
+        $comisionCerrador = $comisiondesarrollador; // Asignar la comisión del desarrollador al cerrador para el registro
         $request->merge(['ingreso' => $request->cerro]);
     } else {
     // Definir porcentajes según si el ingresador y cerrador son el mismo
@@ -92,8 +98,8 @@ class RegistroCierreController extends Controller
         $comisionIngresador = $montoComisionTotal * ($porcentajeIngresador / 100);
         $comisionCerrador = $montoComisionTotal * ($porcentajeCerrador / 100);
         $comisionOficina = $montoComisionTotal * ($porcentajeOficina / 100);
-        $comisionDeveloper = null;
-        $porcentajeDeveloper = null;
+        $comisiondesarrollador = null;
+        $porcentajedesarrollador = null;
     }
 
     // Crear registro en la base de datos
@@ -112,11 +118,11 @@ class RegistroCierreController extends Controller
         'porcentaje_ingresador' => $porcentajeIngresador, //Porcentaje asignado al ingresador
         'porcentaje_cerrador' => $porcentajeCerrador, //Porcentaje asignado al cerrador
         'porcentaje_oficina' => $porcentajeOficina, //Porcentaje asignado a la oficina
-        'porcentaje_developer' => $porcentajeDeveloper, //Porcentaje asignado al developer (solo si aplica)
+        'porcentaje_desarrollador' => $porcentajedesarrollador, //Porcentaje asignado al desarrollador (solo si aplica)
         'comision_ingresador' => $comisionIngresador, //Monto de comision para el ingresador
         'comision_cerrador' => $comisionCerrador, //Monto de comision para el cerrador
         'comision_oficina' => $comisionOficina,     //Monto de comision para la oficina
-        'comision_developer' => $comisionDeveloper,  //Monto de comision para el developer (solo si aplica)
+        'comision_desarrollador' => $comisiondesarrollador,  //Monto de comision para el desarrollador (solo si aplica)
     ]);
 
     // Redirige a la página de éxito con un mensaje
