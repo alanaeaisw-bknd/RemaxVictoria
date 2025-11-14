@@ -43,7 +43,6 @@ class RegistroCierreController extends Controller
     // Validaciones básicas
     $request->validate([
         'cerro' => 'required|numeric',
-        'ingreso' => 'required|numeric',
         'monto_propiedad' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
         'recurso' => 'required|string',
         'fuente_contacto' => 'required|integer|not_in:0',
@@ -57,6 +56,7 @@ class RegistroCierreController extends Controller
     if (!$mododesarrollador) {
         $rules['ingreso'] = 'required|numeric';
     }
+
 
     // Cálculo del monto total de comisión
     $montoPropiedad = $request->monto_propiedad;
@@ -84,8 +84,8 @@ class RegistroCierreController extends Controller
     // Definir porcentajes según si el ingresador y cerrador son el mismo
         if ($request->ingreso == $request->cerro) {
             // Caso: ingresador y cerrador son el mismo
-            $porcentajeIngresador = 70;
-            $porcentajeCerrador = 0;
+            $porcentajeIngresador = 35;
+            $porcentajeCerrador = 35;
             $porcentajeOficina = 30;
         } else {
             // Caso: ingresador y cerrador diferentes

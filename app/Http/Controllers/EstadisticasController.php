@@ -217,8 +217,8 @@ class EstadisticasController extends Controller
     private function generatedesarrolladorStats($fechaInicio = null, $fechaFin = null)
     {
         $query = RegistroCierre::join('users', 'registro_cierre.cerro', '=', 'users.id')
-            ->whereNotNull('registro_cierre.comision_desarrolador')
-            ->where('registro_cierre.comision_desarrolador', '>', 0);
+            ->whereNotNull('registro_cierre.comision_desarrollador')
+            ->where('registro_cierre.comision_desarrollador', '>', 0);
 
         if ($fechaInicio && $fechaFin) {
             $query->whereBetween('registro_cierre.fecha', [$fechaInicio, $fechaFin]);
@@ -227,7 +227,7 @@ class EstadisticasController extends Controller
         return $query->select(
             'users.nombre',
             DB::raw('count(*) as desarrollador_count'),
-            DB::raw('sum(registro_cierre.comision_desarrolador) as total_monto_desarrollador')
+            DB::raw('sum(registro_cierre.comision_desarrollador) as total_monto_desarrollador')
         )
         ->groupBy('users.nombre')
         ->get();

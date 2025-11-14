@@ -35,17 +35,17 @@ body {
 
 /* Centered Container Styles */
 .center {
-    position: absolute;
-    top: 62%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70%; /* Aumentado el ancho para una mejor visualización */
+    position: relative; /* antes era absolute */
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 70%;
+    margin: 50px auto; /* centra horizontalmente y da espacio arriba */
     background: #0B2742;
     border-radius: 10px;
-    padding: 5px; /* Añadido relleno para un mejor espacio interno */
-    text-align: center; /* Centrar el contenido */
-    color: white; /* Cambiado el color de texto a blanco */
-    margin-bottom: 20px; /* Agrega un margen inferior de 20 píxeles al contenedor */
+    padding: 20px;
+    text-align: center;
+    color: white;
 }
 
 /* Form Styles */

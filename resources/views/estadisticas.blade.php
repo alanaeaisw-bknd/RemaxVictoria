@@ -69,11 +69,22 @@
         </div>
     </div>
 </div>
-
 <div class="estadisticas">
     <div class="grafica">
         <div class="cabecera">
-            <p class="parametro">HISTORICO DE CIERRES</p>
+            <p class="parametro">HISTÓRICO DE OFICINA</p>
+        </div>
+        <div class="programming-stats">
+            <div class="chart-container">
+                <canvas class="my-chart" id="graficaOficina"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="estadisticas">
+    <div class="grafica">
+        <div class="cabecera">
+            <p class="parametro">HISTORICO DE CIERRES ACUMULADO</p>
         </div>
         <div class="programming-stats">
             <div class="chart-container">
@@ -201,8 +212,8 @@
                 {
                     label: 'Numero Total',
                     data: cierresCount,
-                    backgroundColor: '#3498db',
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: '#2a00b4ff',
+                    borderColor: 'rgba(255, 255, 255, 1)',
                     borderWidth: 1
                 },
                 {
@@ -301,14 +312,14 @@ var myChartIngreso = new Chart(ctxIngreso, {
                 label: 'Número Total',
                 data: ingresoCount,
                 backgroundColor: '#3498db',
-                borderColor: 'rgba(75, 192, 192, 1)',
+                borderColor: 'rgba(255, 255, 255, 1)',
                 borderWidth: 1
             },
             {
                 label: 'Monto Total',
                 data: montoTotalIngreso,
-                backgroundColor: '#e74c3c',
-                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: '#2121f3ff',
+                borderColor: 'rgba(255, 255, 255, 1)',
                 borderWidth: 1
             }
         ]
@@ -419,7 +430,7 @@ var myChartdesarrollador = new Chart(ctxdesarrollador, {
             datasets: [{
                 label: 'Cierres Mensuales',
                 data: mesCount,
-                backgroundColor: '#3498db',
+                backgroundColor: '#0a29f4ff',
             }]
         }
     });
@@ -535,10 +546,10 @@ var myChartdesarrollador = new Chart(ctxdesarrollador, {
     const totalFormateadoOficina = formatterOficina.format(sumaTotalOficina);
     
     // 5. Crear la etiqueta para la leyenda
-    const leyendaConTotal = `Monto Total Ganado por Mes (Total: ${totalFormateadoOficina})`;
+    const leyendaConTotal = `Monto Total : ${totalFormateadoOficina})`;
 
 
-    // 6. Crear la gráfica
+    // 6. Crear la gráfica de la Oficina 
     var ctxOficina = document.getElementById('graficaOficina').getContext('2d');
     var myChartOficina = new Chart(ctxOficina, {
         type: 'bar',
@@ -547,8 +558,8 @@ var myChartdesarrollador = new Chart(ctxdesarrollador, {
             datasets: [{
                 label: leyendaConTotal, 
                 data: dataOficina,
-                backgroundColor: '#e74c3c',
-                borderColor: '#c0392b',
+                backgroundColor: '#000000ff',
+                borderColor: '#ffffffff',
                 borderWidth: 1
             }]
         },
