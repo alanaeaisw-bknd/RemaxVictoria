@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ asset('css/style9.css') }}">
+    <link rel="stylesheet" href="<?php echo e(asset('css/style9.css')); ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -17,19 +17,19 @@
 
 <body>
     <header>
-        @include('nav')
+        <?php echo $__env->make('nav', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     </header>
 
     <div class="search">
-    <form id="filterForm" action="{{ route('filtrarRegistros') }}" method="GET" class="buscador">
-        @csrf
+    <form id="filterForm" action="<?php echo e(route('filtrarRegistros')); ?>" method="GET" class="buscador">
+        <?php echo csrf_field(); ?>
         <label for="fechaInicio" class="fechas">Fecha Inicio</label>
         <input class="inputt" type="date" id="fechaInicio" name="fechaInicio"
-               value="{{ request('fechaInicio', date('Y-01-01')) }}" required>
+               value="<?php echo e(request('fechaInicio', date('Y-01-01'))); ?>" required>
 
         <label for="fechaFin" class="fechas">Fecha Fin</label>
         <input class="inputt" type="date" id="fechaFin" name="fechaFin"
-               value="{{ request('fechaFin', date('Y-12-31')) }}" required>
+               value="<?php echo e(request('fechaFin', date('Y-12-31'))); ?>" required>
 
         <button type="submit" class="lupa-cuad">
             <svg class="lupa" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -38,7 +38,7 @@
         </button>
     </form>
 
-    <button type="button" class="btn btn-warning" onclick="window.location.href='{{ url('/registros-cierre') }}'">EDITAR DATOS</button>
+    <button type="button" class="btn btn-warning" onclick="window.location.href='<?php echo e(url('/registros-cierre')); ?>'">EDITAR DATOS</button>
 </div>
 <div class="hit-the-floor">
     <h1>ANALITICAS DE CIERRES</h1>
@@ -69,22 +69,11 @@
         </div>
     </div>
 </div>
+
 <div class="estadisticas">
     <div class="grafica">
         <div class="cabecera">
-            <p class="parametro">HISTÓRICO DE OFICINA</p>
-        </div>
-        <div class="programming-stats">
-            <div class="chart-container">
-                <canvas class="my-chart" id="graficaOficina"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="estadisticas">
-    <div class="grafica">
-        <div class="cabecera">
-            <p class="parametro">HISTORICO DE CIERRES ACUMULADO</p>
+            <p class="parametro">HISTORICO DE CIERRES</p>
         </div>
         <div class="programming-stats">
             <div class="chart-container">
@@ -96,16 +85,11 @@
 <div class="estadisticas">
     <div class="grafica">
         <div class="cabecera">
-            <p class="parametro">ESTADISTICAS COMO DESARROLLADOR</p>
-        </div>  
+            <p class="parametro">ESTADISTICAS COMO DEVELOPER</p>
+        </div>
         <div class="programming-stats">
-<<<<<<< Updated upstream
-            <div class="chart-container-mod">
-                <canvas class="my-chart" id="graficadesarrollador"></canvas>
-=======
             <div class="chart-container">
                 <canvas class="my-chart" id="graficaDeveloper"></canvas>
->>>>>>> Stashed changes
             </div>
         </div>
     </div>
@@ -230,8 +214,8 @@
                 {
                     label: 'Numero Total',
                     data: cierresCount,
-                    backgroundColor: '#2a00b4ff',
-                    borderColor: 'rgba(255, 255, 255, 1)',
+                    backgroundColor: '#3498db',
+                    borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1
                 },
                 {
@@ -330,14 +314,14 @@ var myChartIngreso = new Chart(ctxIngreso, {
                 label: 'Número Total',
                 data: ingresoCount,
                 backgroundColor: '#3498db',
-                borderColor: 'rgba(255, 255, 255, 1)',
+                borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
             },
             {
                 label: 'Monto Total',
                 data: montoTotalIngreso,
-                backgroundColor: '#2121f3ff',
-                borderColor: 'rgba(255, 255, 255, 1)',
+                backgroundColor: '#e74c3c',
+                borderColor: 'rgba(255, 99, 132, 1)',
                 borderWidth: 1
             }
         ]
@@ -351,42 +335,42 @@ var myChartIngreso = new Chart(ctxIngreso, {
     }
 });
 
-// === GRÁFICA DE DESARROLADOR ===
-var desarrolladorData = <?php echo json_encode($desarrolladorStats); ?>;
+// === GRÁFICA DE DEVELOPER ===
+var developerData = <?php echo json_encode($developerStats); ?>;
 
 // Ordenar por monto total
-desarrolladorData.sort(function (a, b) {
-    return b.total_monto_desarrollador - a.total_monto_desarrollador;
+developerData.sort(function (a, b) {
+    return b.total_monto_developer - a.total_monto_developer;
 });
 
-var labelsdesarrollador = desarrolladorData.map(function (stat) {
+var labelsDeveloper = developerData.map(function (stat) {
     return stat.nombre;
 });
 
-var desarrolladorCount = desarrolladorData.map(function (stat) {
-    return stat.desarrollador_count;
+var developerCount = developerData.map(function (stat) {
+    return stat.developer_count;
 });
 
-var desarrolladorMonto = desarrolladorData.map(function (stat) {
-    return stat.total_monto_desarrollador;
+var developerMonto = developerData.map(function (stat) {
+    return stat.total_monto_developer;
 });
 
-var ctxdesarrollador = document.getElementById('graficadesarrollador').getContext('2d');
-var myChartdesarrollador = new Chart(ctxdesarrollador, {
+var ctxDeveloper = document.getElementById('graficaDeveloper').getContext('2d');
+var myChartDeveloper = new Chart(ctxDeveloper, {
     type: 'bar',
     data: {
-        labels: labelsdesarrollador,
+        labels: labelsDeveloper,
         datasets: [
             {
                 label: 'Número Total',
-                data: desarrolladorCount,
+                data: developerCount,
                 backgroundColor: '#8e44ad',
                 borderColor: '#5e3370',
                 borderWidth: 1
             },
             {
                 label: 'Monto Total',
-                data: desarrolladorMonto,
+                data: developerMonto,
                 backgroundColor: '#9b59b6',
                 borderColor: '#5e3370',
                 borderWidth: 1
@@ -448,7 +432,7 @@ var myChartdesarrollador = new Chart(ctxdesarrollador, {
             datasets: [{
                 label: 'Cierres Mensuales',
                 data: mesCount,
-                backgroundColor: '#0a29f4ff',
+                backgroundColor: '#3498db',
             }]
         }
     });
@@ -564,10 +548,10 @@ var myChartdesarrollador = new Chart(ctxdesarrollador, {
     const totalFormateadoOficina = formatterOficina.format(sumaTotalOficina);
     
     // 5. Crear la etiqueta para la leyenda
-    const leyendaConTotal = `Monto Total : ${totalFormateadoOficina})`;
+    const leyendaConTotal = `Monto Total Ganado por Mes (Total: ${totalFormateadoOficina})`;
 
 
-    // 6. Crear la gráfica de la Oficina 
+    // 6. Crear la gráfica
     var ctxOficina = document.getElementById('graficaOficina').getContext('2d');
     var myChartOficina = new Chart(ctxOficina, {
         type: 'bar',
@@ -576,8 +560,8 @@ var myChartdesarrollador = new Chart(ctxdesarrollador, {
             datasets: [{
                 label: leyendaConTotal, 
                 data: dataOficina,
-                backgroundColor: '#000000ff',
-                borderColor: '#ffffffff',
+                backgroundColor: '#e74c3c',
+                borderColor: '#c0392b',
                 borderWidth: 1
             }]
         },
@@ -629,9 +613,9 @@ var myChartdesarrollador = new Chart(ctxdesarrollador, {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/nav.js') }}"></script>
+    <script src="<?php echo e(asset('js/app.js')); ?>"></script>
+    <script src="<?php echo e(asset('js/nav.js')); ?>"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
-</html>
+</html><?php /**PATH C:\laragon\www\RemaxVictoria\resources\views/estadisticas.blade.php ENDPATH**/ ?>

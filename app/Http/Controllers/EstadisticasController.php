@@ -45,9 +45,14 @@ class EstadisticasController extends Controller
             $rangoEdadStats = $this->generateColumnStats('rango_edad', $fechaInicio, $fechaFin);
             $estadoCivilStats = $this->generateColumnStats('estado_civil', $fechaInicio, $fechaFin);
             $mesStats = $this->generateStatsByMonth($fechaInicio, $fechaFin);
+<<<<<<< Updated upstream
             $desarrolladorStats = $this->generatedesarrolladorStats($fechaInicio, $fechaFin);
             $oficinaStats = $this->generateStatsOficinaByMonth($fechaInicio, $fechaFin);
 
+=======
+            $developerStats = $this->generateDeveloperStats($fechaInicio, $fechaFin);
+            $oficinaStats = $this->generateStatsOficinaByMonth($fechaInicio, $fechaFin);
+>>>>>>> Stashed changes
             return view('estadisticas', compact(
                 'usuarios', 'stats', 'permiso', 'ingresoStats', 'recursoStats',
                 'fuenteContactoStats', 'generoStats', 'rangoEdadStats', 'estadoCivilStats', 'mesStats',
@@ -72,7 +77,10 @@ class EstadisticasController extends Controller
             'desarrolladorStats', 'oficinaStats'
         ));
     }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     public function generateStats()
     {
         return RegistroCierre::join('users', 'registro_cierre.cerro', '=', 'users.id')
